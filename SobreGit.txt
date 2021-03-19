@@ -1,0 +1,18 @@
+Lo relacionado a comandos esta en ingles, los argumentos en español.
+Para crear un repositorio desde 0:
+
+git init
+
+Luego, añadir un archivo y comentarlo
+
+git add archivo
+
+git commit -m "Comentarios"
+
+Enviarlo al repositorio remoto
+
+git push
+
+Traer del repsitorio remoto
+
+git pull
