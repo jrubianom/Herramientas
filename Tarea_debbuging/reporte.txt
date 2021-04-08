@@ -1,0 +1,59 @@
+En memoria primero va el arreglo z, luego el arreglo y, esto se puede verificar
+de dos formas, antes de arreglar el codigo los valores que imprime z maś allá de
+z[NZ-1] son los valores del arreglo y. La otra forma es en gdb, hacer un break
+point justo despues de la declaración de los arreglos e imprimendo las
+direcciones de memoria con print(&z[NZ]) y print(&y[0]), y  como era de esparase,
+estas coinciden.
+
+La direcciones de memoria de x[i] estan en otro lugar no contiguo al arreglo
+z y al arreglo y,esto tambien se puede verificar con el metodo anunciado anteriormente.
+
+La pregunta ¿Cual es el objetivo del programa?
+Quizas la respuesta mas real sea "para practicar el debbuging", pero si se
+queire dar otra respuesta, diria que es ncializar tres arreglos de tal manera
+que sus entradas sean enteros , inciando con el 0 y aumentando en 1 hasta
+llenarlo.
+Y finalmente imprimir los arreglos que se han inicializado, cada vez que se
+inicializa uno nuevo.
+
+En resumen, empecé corrigiendo errores con la bandera -Wall
+luego con las bandera -Wall y -fsanitize=adress y -fsanitize=undefined
+simultaneamente, y finalmente con valgrind.
+
+Con Wall solo se arreglaró un error, a saber,  el del primer bucle for, en donde al parecer se
+confundia ii con jj, y ni siquiera estaba inicializasa jj.
+Con los sanitize no apareció ningun error.
+
+La parte gruesa, valgrind:
+Primero, compilar de nuevo con g++ -g array_bounds.cpp, luego usé el comando
+valgrind --tool=memcheck ./a.out &> log.txt
+
+Como los arreglos no estan inicializados,entonces hay un errorr en la lineas
+11,12,13. Comenté estas lineas, pues supuse que el objetivo del pro
+
+En la linea 20 y 21 hay un error debido a que se esta accediendo a direcciones
+de memoria por fuera de los limites de los  los tamaños asignados a los
+arreglos. Además ni y ni z estan inicializados,asi que comenté esas dos lineas.
+Lo corregí poniendo los respectivos tamaños, y comentando las lineas 21 y 22,
+pues y y z no estan inicializados.
+
+En el bule de la linea 25, el arreglo x se sale del limite. De nuevo, comenté
+esa linea.
+
+De nuevo, en las lineas 29,30,31 se presentan los mismos erroes, se salen de los
+limites del arreglo y z aun no está incializado. Enonces corregí lo de los
+limites y comenté la, linea de z.
+
+En las lineas 35 y 36 hay dos erores, uno lo detectó valgrind, que es el de en y
+se salen de los limites (entonces comenté esa linea). El otro no sé si sea un error o no, pero
+probalblemente lo sea, y es que tanto en la condición del bucle como en la linea
+de x[kk] = ii, parece que quien lo programó se confucnió y debió pner kk en vez
+de jj, y kk en vez de ii. Al hacer eso, entonces x tambien se sale de sus
+limtes, por ende, tambien la comento.
+
+
+
+
+
+
+Es dificl saber cual era el objetivo inicial, pueden ser varios, c

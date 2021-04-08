@@ -1,0 +1,4 @@
+Codigo fuente corregido que tenga la misma funcionalidad (en lo posible) y que no genere errores de compilación, ni con sanitizers ni con valgrind.
+    •    Reporte (archivo reporte.txt ) que contenga
+    ⁃    una explicación corta de cómo están distribuidos en memoria los tres arreglos declarados: Son continuos? quién va primero, segundo o tercero?
+    ⁃    un reporte suscinto de los cambios realizados para arreglar el código, indicando las mejoras y el para qué se hicieron y el porqué. Específicamente, debe indicar cuál era el objetivo inicial más probable, y cómo se debería corregir. Por ejemplo, si una impresión era algo como print(z, NY+NX), tiene algún sentido? cómo se escribiría mejor para hacer lo mismo pero sin generar errores?
