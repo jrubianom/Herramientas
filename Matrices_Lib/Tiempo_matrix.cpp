@@ -3,7 +3,7 @@
 #include <eigen3/Eigen/Dense>
 #include<chrono>
 
-int create_arrays(int N);
+
 
 int main(int argc, char** argv)
 {
