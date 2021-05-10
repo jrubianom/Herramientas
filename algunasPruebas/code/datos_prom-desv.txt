@@ -1,0 +1,5 @@
+Tiempo promedio y desv. est.
+0	0
+ 
+Mflops promedio y desv. est.
+0	 	0
