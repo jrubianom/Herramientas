@@ -8,6 +8,7 @@ void init_row_major(double* A,Eigen::MatrixXd &X,int seed);
 void init_column_major(double* A,Eigen::MatrixXd &X,int seed);
 void Mv(double* A,double* B, double* C,int n, int m, int col);
 void multiplication(double* A,double* B, double* C, int n, int m,int p,int nthrds);
+void make_copy(double* A, double* A_local);
 
 int main(int argc,char** argv){
 
@@ -71,16 +72,30 @@ void Mv(double* A,double* B, double* C,int n, int m,int col){
     }
 }
 
+void make_copy(double* A, double* A_local,int n, int m){
+    for(int i = 0; i<n; i++){
+        for(int j=0; j<m;j++){
+            A_local[i*m+j] = A[i*m+j];
+        }
+    }
+}
+
 void multiplication(double* A,double* B, double* C, int n, int m,int p,int nthrds){
 
     int N = p/nthrds;
     int r = p % nthrds;
 #pragma omp parallel num_threads(nthrds)
     {
+    double A_local[n*m];
+#pragma omp critical
+{
+    make_copy(A,A_local,n,m);
+}
+#pragma omp barrier
     int ID = omp_get_thread_num();
     int index_0 = N*ID; int index_f = N*(ID+1);
     for (int col=index_0; col<index_f;col++){
-        Mv(A,B,C,n,m,col);
+        Mv(A_local,B,C,n,m,col);
     }
     }
 }
