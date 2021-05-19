@@ -18,10 +18,12 @@ int main(int argc,char** argv){
     init_row_major(A,X,2);
     init_column_major(B,Y,3);
     Z = X*Y;
+    t1 = omp_get_wtime();
     multiplication(A,B,C,n,m,p,nthrds);
+    t2 = omp_get_wtime();
     print_matrix(C,n,p);
     std::cout<<Z<<std::endl;
-
+    std::cout<<"Time:\t"<<t2-t1<<std::endl;
 //    init_row_major(A,X,2);
 
 }
