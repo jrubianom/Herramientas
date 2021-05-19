@@ -13,6 +13,7 @@ int main(int argc,char** argv){
 
     int nthrds = std::atoi(argv[1]);
     int n = 2,m=3,p=4;
+    double t1,t2;
     double A[n*m], B[m*p], C[n*p]={0.0};
     Eigen::MatrixXd X(n,m),Y(m,p),Z(n,p);
     init_row_major(A,X,2);
