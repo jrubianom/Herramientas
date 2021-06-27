@@ -19,7 +19,13 @@ struct Particula
 void initial_conditionsp(int seed_0,int N_particulas,
                         std::vector<Particula> &Ps, vector dbox,
                         double m, double r, double speed0, bool flag_z,
-                        bool flag_speed, int thid, int nth);
+                         bool flag_speed, int thid, int nth);
+
+void initial_conditions(int seed_0,int N_particulas,
+                        std::vector<Particula> &Ps, vector dbox,
+                        double m, double r, double speed0,
+                        bool flag_z, bool flag_speed);
+
 
 
 double Tiempo_colision_pared(Particula P,vector dimensiones,double tiempo_actual);

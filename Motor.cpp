@@ -38,6 +38,146 @@ void Particula::Evolucionar(double dt){  //Evolucionar actualiza X --> X = X_0 +
 ////////////////////////////////////////////////////////////////
 ///Inicializacion
 
+
+void initial_conditions(int seed_0,int N_particulas,
+                        std::vector<Particula> &Ps, vector dbox, double m, double r, double speed0, bool flag_z, bool flag_speed){
+  //inputs
+  double a = dbox[0],b = dbox[1], c = dbox[2]; // dimensiones de la caja
+  double max_speed = speed0;
+  int nz = 0;
+  int ny = 4;
+  int nx = 5;
+  int NZ = 10; //in case you want to distribute the positions also in z, NZ tells the program how many slices you want to have in z
+  if(flag_z == false)  ny = (N_particulas/nx)+1;
+  else{ ny = ((N_particulas/NZ)/(nx))+1; nz = (N_particulas/(nx*ny))+1;}
+
+  int seed = seed_0;
+  std::mt19937 gen(seed);
+  /*std::uniform_real_distribution<double> random_posx(0+r, a-r);
+  std::uniform_real_distribution<double> random_posy(0+r, b-r);
+  std::uniform_real_distribution<double> random_posz(0+r, c-r);*/
+  std::uniform_real_distribution<double> random_vel(0, max_speed);
+  std::uniform_real_distribution<double> random_phi(0,2*M_PI);
+  std::uniform_real_distribution<double> random_theta(0, M_PI);
+
+  double x,y,z,vx,vy,vz,speed,phi,theta;
+  vector vel0(3);
+  vector pos0(3);
+  int ix = 0;
+  int iy = 0;
+  int iz = 0;
+
+  /*flag_speed == 0 -> gives random velocities with the random library taking the entry of the function as the maximum speed of the random distribution
+    flag speed == 1 -> gives the constant velocity given in the entries of the function
+  */
+
+  if(flag_speed == 0){
+    if(flag_z == false){ //if we do not want to distribute the particles in z
+      for(int ii = 0; ii < N_particulas; ii++){
+	/*the particles will be distributed in the various axis in the priorty order
+	  x and then y */
+	ix = (ii % nx)+1;
+	iy = (ii/nx)+1;
+	x = (a/(nx+2))*ix;
+	y = (b/(ny+2))*iy;
+	z = r;
+	pos0 = {x,y,z};
+	speed = random_vel(gen);
+	phi = random_phi(gen);
+	theta = random_theta(gen);
+	vx = speed*std::cos(phi);
+	vy = speed*std::sin(phi);
+	vz = 0;
+	vel0 = {vx,vy,vz};
+	Particula P;
+	P.init(pos0,vel0,m,r);
+	Ps[ii] = P;
+      }
+    }
+
+    if(flag_z == true){ //if we want to distribute the particles also in z
+      for(int ii = 0; ii < N_particulas; ii++){
+	/*the particles will be distributed in the various axis in the priorty order
+	  x, then y, and then z*/
+	ix = (ii % nx)+1;
+	iy = (ii/nx % ny)+1;
+	iz = (ii/(nx*ny))+1;
+	x = (a/(nx+2))*ix;
+	y = (b/(ny+2))*iy;
+	z = (c/(nz+2))*iz;
+	pos0 = {x,y,z};
+	speed = random_vel(gen);
+	phi = random_phi(gen);
+	theta = random_theta(gen);
+	vx = speed*std::sin(theta)*std::cos(phi);
+	vy = speed*std::sin(phi)*std::sin(theta);
+	vz = speed*std::cos(theta);
+	vel0 = {vx,vy,vz};
+	Particula P;
+	P.init(pos0,vel0,m,r);
+	Ps[ii] = P;
+      }
+    }
+  }
+
+  if(flag_speed == 1){
+    if(flag_z == false){ //if we do not want to distribute the particles in z
+      for(int ii = 0; ii < N_particulas; ii++){
+	/*the particles will be distributed in the various axis in the priorty order
+	  x and then y */
+	ix = (ii % nx)+1;
+	iy = (ii/nx)+1;
+	x = (a/(nx+2))*ix;
+	y = (b/(ny+2))*iy;
+	z = r;
+	pos0 = {x,y,z};
+	speed = speed0;
+	phi = random_phi(gen);
+	theta = random_theta(gen);
+	vx = speed*std::cos(phi);
+	vy = speed*std::sin(phi);
+	vz = 0;
+	vel0 = {vx,vy,vz};
+	Particula P;
+	P.init(pos0,vel0,m,r);
+	Ps[ii] = P;
+      }
+    }
+
+    if(flag_z == true){ //if we want to distribute the particles also in z
+      for(int ii = 0; ii < N_particulas; ii++){
+	/*the particles will be distributed in the various axis in the priorty order
+	  x, then y, and then z*/
+	ix = (ii % nx)+1;
+	iy = (ii/nx % ny)+1;
+	iz = (ii/(nx*ny))+1;
+	x = (a/(nx+2))*ix;
+	y = (b/(ny+2))*iy;
+	z = (c/(nz+2))*iz;
+	pos0 = {x,y,z};
+	speed = speed0;
+	phi = random_phi(gen);
+	theta = random_theta(gen);
+	vx = speed*std::sin(theta)*std::cos(phi);
+	vy = speed*std::sin(phi)*std::sin(theta);
+	vz = speed*std::cos(theta);
+	vel0 = {vx,vy,vz};
+	Particula P;
+	P.init(pos0,vel0,m,r);
+	Ps[ii] = P;
+      }
+    }
+  }
+
+
+}
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+
+
 void initial_conditionsp(int seed_0,int N_particulas,
                          std::vector<Particula> &Ps, vector dbox,
                          double m, double r, double speed0,
